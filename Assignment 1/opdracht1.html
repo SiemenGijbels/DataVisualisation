@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Assignment 1 — Siemen Gijbels</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        
+        .mapboxgl-popup {
+            max-width: 400px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+        
+        .mapboxgl-popup p {
+            font-size: 20px;
+        }
+        
+        #legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #444;
+            width: 500px;
+            height: 600px;
+            z-index: 3;
+            border-radius: 10px;
+            overflow: hidden;
+            font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: white;
+            opacity: 0;
+            transform: scale(.85);
+            transition: all 0.7s ease;
+        }
+        
+        #legend.animated {
+            transition: all 0.7s ease;
+            transform: scale(1);
+            opacity: 100;
+        }
+        
+        #legend table {
+            width: 100%;
+            margin-bottom: 0;
+            height: 90%;
+            color: white;
+        }
+        
+        th.empty {
+            width: 15%;
+        }
+        
+        td.td-text {
+            padding-left: 15px;
+        }
+        
+        th,
+        td,
+        tr,
+        table {
+            border-spacing: 0;
+        }
+        
+        h1 {
+            padding-left: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="legend">
+        <h1>Traffic Violations Chicago 2014 - 2017</h1>
+        <table>
+            <tr>
+                <th class="empty">&nbsp;</th>
+                <th>Red Light Camera Violations</th>
+                <th class="empty">&nbsp;</th>
+                <th>Speed Camera Violations</th>
+            </tr>
+            <tr>
+                <td style="background-color:#ffffff"></td>
+                <td class="td-text"> less or equal to: 2,499</td>
+                <td style="background-color:#21fc00"></td>
+                <td class="td-text"> less or equal to: 2,499</td>
+            </tr>
+            <tr>
+                <td style="background-color:#fff2ef"></td>
+                <td class="td-text"> less or equal to: 4,999</td>
+                <td style="background-color:#27e10e"></td>
+                <td class="td-text"> less or equal to: 4,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#fee2da"></td>
+                <td class="td-text"> less or equal to: 9,999</td>
+                <td style="background-color:#29c814"></td>
+                <td class="td-text"> less or equal to: 9,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#f6ac9a"></td>
+                <td class="td-text">less or equal to: 14,999</td>
+                <td style="background-color:#299419"></td>
+                <td class="td-text">less or equal to: 14,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#e77d64"></td>
+                <td class="td-text"> less or equal to: 19,999</td>
+                <td style="background-color:#267119"></td>
+                <td class="td-text"> less or equal to: 19,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#de654b"></td>
+                <td class="td-text"> less or equal to: 29,999</td>
+                <td style="background-color:#235e17"></td>
+                <td class="td-text"> less or equal to: 29,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#d54d34"></td>
+                <td class="td-text"> less or equal to: 49,999</td>
+                <td style="background-color:#1f4c16"></td>
+                <td class="td-text"> less or equal to: 49,999</td>
+            </tr>
+            <tr>
+                <td style="background-color:#ca321d"></td>
+                <td class="td-text"> more than: 50,000</td>
+                <td style="background-color:#1b3b13"></td>
+                <td class="td-text"> more than: 50,000</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        mapboxgl.accessToken = "pk.eyJ1Ijoic2llbWVuZ2lqYmVscyIsImEiOiJjanBqdzY5dnAwOWhyM3JvYzMxcmQ3cXFiIn0.oMDpU811kj-CBIR0ZzmYYg";
+        var map = new mapboxgl.Map({
+            container: "map",
+            style: "mapbox://styles/mapbox/dark-v9",
+        });
+
+        map.on('load', function() {
+
+
+            map.addLayer({
+                "id": "red-light-camera-violations",
+                "type": "circle",
+                "source": {
+                    type: 'vector',
+                    url: 'mapbox://siemengijbels.5yurp8d3'
+                },
+                'source-layer': 'red-light-camera-violations-e-5revz2',
+                'paint': {
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [
+                            [10, 5],
+                            [20, 30]
+                        ]
+                    },
+                    'circle-color':
+
+                        ["case",
+
+                            ["<=", ["get", "VIOLATIONS"], 2499], "#ffffff", ["<=", ["get", "VIOLATIONS"], 4999], "#fff2ef", ["<=", ["get", "VIOLATIONS"], 9999], "#fee2da", ["<=", ["get", "VIOLATIONS"], 14999], "#f6ac9a", ["<=", ["get", "VIOLATIONS"], 19999], "#e77d64", ["<=", ["get", "VIOLATIONS"], 29999], "#de654b", ["<=", ["get", "VIOLATIONS"], 49999], "#d54d34", "#ca321d"
+                        ]
+                }
+            });
+
+            map.addLayer({
+                "id": "speed-camera-violations",
+                "type": "circle",
+                "source": {
+                    type: 'vector',
+                    url: 'mapbox://siemengijbels.98r5dg78'
+                },
+                'source-layer': 'speed-camera-violations-edit-5vi7cr',
+                'paint': {
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [
+                            [10, 5],
+                            [20, 30]
+                        ]
+                    },
+                    'circle-color':
+
+                        ["case",
+
+                            ["<=", ["get", "VIOLATIONS"], 2499], "#21fc00", ["<=", ["get", "VIOLATIONS"], 4999], "#27e10e", ["<=", ["get", "VIOLATIONS"], 9999], "#29c814", ["<=", ["get", "VIOLATIONS"], 14999], "#299419", ["<=", ["get", "VIOLATIONS"], 19999], "#267119", ["<=", ["get", "VIOLATIONS"], 29999], "#235e17", ["<=", ["get", "VIOLATIONS"], 49999], "#1f4c16", "#1b3b13"
+                        ]
+                }
+            });
+
+            map.flyTo({
+                center: [-87.6400899, 41.855886],
+                zoom: 10.5
+            });
+
+            var flying;
+
+            map.on('flystart', function() {
+                flying = true;
+            });
+            map.on('flyend', function() {
+                flying = false;
+            });
+
+            map.on('moveend', function(e) {
+                if (!flying) {
+                    $("#legend").addClass('animated');
+                }
+            });
+
+            $(document).ready(function() {
+                
+            });
+
+            var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            map.on('mouseenter', 'red-light-camera-violations', function(e) {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var title = e.features[0].properties.ADDRESS;
+                var description = e.features[0].properties.VIOLATIONS;
+
+                var popupcontent = "<strong>" + title + "</strong>" + "<p>Red light violations: " + description + "</p>";
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates)
+                    .setHTML(popupcontent)
+                    .addTo(map);
+            });
+
+            map.on('click', 'red-light-camera-violations', function(e) {
+                map.flyTo({
+                    center: e.features[0].geometry.coordinates,
+                    zoom: 15
+                });
+            });
+
+            map.on('click', 'speed-camera-violations', function(e) {
+                map.flyTo({
+                    center: e.features[0].geometry.coordinates,
+                    zoom: 15
+                });
+            });
+
+            map.on('mouseleave', 'red-light-camera-violations', function() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+            map.on('mouseenter', 'speed-camera-violations', function(e) {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var title = e.features[0].properties.ADDRESS;
+                var description = e.features[0].properties.VIOLATIONS;
+
+                var popupcontent = "<strong>" + title + "</strong>" + "<p>Speed violations: " + description + "</p>";
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates)
+                    .setHTML(popupcontent)
+                    .addTo(map);
+            });
+
+            map.on('mouseleave', 'speed-camera-violations', function() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+
+        });
+
+    </script>
+
+</body>
+
+</html>
