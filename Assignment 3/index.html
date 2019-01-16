@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        
+        #sliderbar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #444;
+            padding: 25px;
+            border-radius: 10px;
+            z-index: 3;
+            font-family: 'Helvetica', 'Helvetica Neue', 'Arial', sans-serif;
+            color: white;
+        }
+        
+        #sliderbar h2 {
+            padding-bottom: 10px;
+        }
+        
+        #sliderbar #slider {
+            width: 80%;
+            margin: auto 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <div class="session" id="sliderbar">
+        <h2>Heatmap of gun crimes in Chicago per year: <label id="active-year">2014</label></h2>
+        <input id="slider" class="row" type="range" min="2014" max="2019" step="1" value="2014" />
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2llbWVuZ2lqYmVscyIsImEiOiJjanBqdzY5dnAwOWhyM3JvYzMxcmQ3cXFiIn0.oMDpU811kj-CBIR0ZzmYYg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v9'
+        });
+
+        map.on('load', function() {
+
+            map.addLayer({
+                "id": "gun-crimes-heatmap",
+                "type": "heatmap",
+                "source": {
+                    type: 'vector',
+                    url: 'mapbox://siemengijbels.4scs1sgj'
+                },
+                "source-layer": 'Gun_Crimes_Heat_Map-2-3wf2zl',
+                "paint": {
+                    // Increase the heatmap weight based on frequency and property magnitude
+                    "heatmap-weight": 1,
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    "heatmap-intensity": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        11, 0.5,
+                        17, 1
+                    ],
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparancy color
+                    // to create a blur-like effect.
+                    "heatmap-color": [
+                        "interpolate",
+                        ["linear"],
+                        ["heatmap-density"],
+                        0, "rgba(0, 0, 255, 0)",
+                        0.1, "royalblue",
+                        0.5, "cyan",
+                        0.6, "lime",
+                        0.7, "yellow",
+                        1, "red"
+                    ],
+                    // Adjust the heatmap radius by zoom level
+                    "heatmap-radius": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        11, 8,
+                        14, 20,
+                        17, 30,
+                        22, 50
+                    ],
+                    // Transition from heatmap to circle layer by zoom level
+                    "heatmap-opacity": 0.6
+                },
+                filter: ['==', ['number', ['get', 'Year']], 2014]
+            });
+
+            document.getElementById('slider').addEventListener('input', function(e) {
+                var year = parseInt(e.target.value);
+                // update the map
+                map.setFilter('gun-crimes-heatmap', ['==', ['number', ['get', 'Year']], year]);
+
+                // update text in the UI
+                document.getElementById('active-year').innerText = year;
+            });
+
+            map.flyTo({
+                center: [-87.556796, 41.792690],
+                zoom: 11,
+                pitch: 50,
+                bearing: -20
+            });
+        });
+    </script>
+</body>
+
+</html>
