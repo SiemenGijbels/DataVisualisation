@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="21" type="file" uuid="1665fc41-5d03-4cea-96c2-e2655d042e9b">
+    <property name="canvasHeight" value="1000"/>
+    <property name="canvasWidth" value="1000"/>
+    <property name="canvasX" value="0"/>
+    <property name="canvasY" value="0"/>
+    <node name="root" prototype="core.network" renderedChild="combine2">
+        <node name="Pie" position="8.00,17.00" prototype="core.network" renderedChild="colorize1">
+            <node name="arc1" position="-6.00,15.00" prototype="corevector.arc"/>
+            <node name="colorize1" position="-6.00,17.00" prototype="corevector.colorize">
+                <port name="fill" type="color" value="#ff0000ff"/>
+            </node>
+            <node name="slice1" position="-6.00,11.00" prototype="list.slice">
+                <port name="size" type="int" value="6"/>
+            </node>
+            <node name="sum2" position="-6.00,13.00" prototype="math.sum"/>
+            <port childReference="slice1.list" description="The input list." label="" name="list" range="list" type="list" widget="none"/>
+            <port childReference="arc1.degrees" description="The amount of degrees of the arc." label="" name="degrees" range="value" type="float" value="45.0" widget="float"/>
+            <port childReference="slice1.size" description="The amount of items to take from the list." label="" min="0.0" name="sliceSize" range="value" type="int" value="10" widget="int"/>
+            <port childReference="colorize1.fill" description="The new fill color. Set alpha to 0 for no fill." label="" name="Fill" range="value" type="color" value="#ff0000ff" widget="color"/>
+            <conn input="sum2.values" output="slice1"/>
+            <conn input="arc1.start_angle" output="sum2"/>
+            <conn input="colorize1.shape" output="arc1"/>
+        </node>
+        <node name="add1" position="14.00,16.00" prototype="math.add"/>
+        <node name="blue" position="-9.00,3.00" prototype="color.color">
+            <port name="color" type="color" value="#0000ffff"/>
+        </node>
+        <node name="colorize1" position="-4.00,16.00" prototype="corevector.colorize"/>
+        <node name="combine1" position="-9.00,8.00" prototype="list.combine"/>
+        <node name="combine2" position="8.00,22.00" prototype="list.combine"/>
+        <node name="convert_range1" position="8.00,12.00" prototype="math.convert_range">
+            <port name="target_end" type="float" value="360.0"/>
+        </node>
+        <node name="coordinates1" position="14.00,18.00" prototype="math.coordinates"/>
+        <node name="count1" position="-2.00,4.00" prototype="list.count"/>
+        <node name="count2" position="2.00,4.00" prototype="list.count"/>
+        <node name="count3" position="6.00,4.00" prototype="list.count"/>
+        <node name="count4" position="10.00,4.00" prototype="list.count"/>
+        <node name="count5" position="14.00,4.00" prototype="list.count"/>
+        <node name="count6" position="18.00,4.00" prototype="list.count"/>
+        <node name="count7" position="3.00,10.00" prototype="list.count"/>
+        <node name="distinct1" position="-4.00,7.00" prototype="list.distinct"/>
+        <node name="divide1" position="8.00,10.00" prototype="math.divide"/>
+        <node name="divide2" position="14.00,11.00" prototype="math.divide">
+            <port name="value2" type="float" value="2.0"/>
+        </node>
+        <node name="green" position="-9.00,1.00" prototype="color.color">
+            <port name="color" type="color" value="#00d400ff"/>
+        </node>
+        <node name="import_csv1" position="8.00,1.00" prototype="data.import_csv">
+            <port name="file" type="string" value="/Users/siemengijbels/Desktop/nodebox/Gun_Crimes_Heat_Map.csv"/>
+        </node>
+        <node name="lookup1" position="-4.00,6.00" prototype="data.lookup">
+            <port name="key" type="string" value="Year"/>
+        </node>
+        <node name="numbersList" position="8.00,7.00" prototype="list.combine"/>
+        <node name="orange" position="-9.00,5.00" prototype="color.color">
+            <port name="color" type="color" value="#ff7c00ff"/>
+        </node>
+        <node name="percentage" position="8.00,11.00" prototype="math.multiply"/>
+        <node name="percentageMultiplier" position="18.00,1.00" prototype="math.number">
+            <port name="value" type="float" value="100.0"/>
+        </node>
+        <node name="purple" position="-9.00,6.00" prototype="color.color">
+            <port name="color" type="color" value="#800090ff"/>
+        </node>
+        <node name="range1" position="3.00,12.00" prototype="math.range"/>
+        <node name="red" position="-9.00,2.00" prototype="color.color">
+            <port name="color" type="color" value="#ff0000ff"/>
+        </node>
+        <node name="rotate1" position="-4.00,15.00" prototype="corevector.rotate"/>
+        <node name="round1" position="-4.00,8.00" prototype="math.round"/>
+        <node name="running_total1" position="11.00,14.00" prototype="math.running_total"/>
+        <node name="sum1" position="8.00,8.00" prototype="math.sum"/>
+        <node name="textpath1" position="-4.00,14.00" prototype="corevector.textpath">
+            <port name="font_name" type="string" value="Helvetica"/>
+        </node>
+        <node name="translate1" position="14.00,20.00" prototype="corevector.translate"/>
+        <node name="year2014" position="-2.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2014"/>
+        </node>
+        <node name="year2015" position="2.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2015"/>
+        </node>
+        <node name="year2016" position="6.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2016"/>
+        </node>
+        <node name="year2017" position="10.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2017"/>
+        </node>
+        <node name="year2018" position="14.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2018"/>
+        </node>
+        <node name="year2019" position="18.00,3.00" prototype="data.filter_data">
+            <port name="key" type="string" value="Year"/>
+            <port name="value" type="string" value="2019"/>
+        </node>
+        <node name="yellow" position="-9.00,4.00" prototype="color.color">
+            <port name="color" type="color" value="#ffff00ff"/>
+        </node>
+        <conn input="year2014.data" output="import_csv1"/>
+        <conn input="year2015.data" output="import_csv1"/>
+        <conn input="year2016.data" output="import_csv1"/>
+        <conn input="year2017.data" output="import_csv1"/>
+        <conn input="year2018.data" output="import_csv1"/>
+        <conn input="year2019.data" output="import_csv1"/>
+        <conn input="count2.list" output="year2015"/>
+        <conn input="count3.list" output="year2016"/>
+        <conn input="count4.list" output="year2017"/>
+        <conn input="count5.list" output="year2018"/>
+        <conn input="count6.list" output="year2019"/>
+        <conn input="count1.list" output="year2014"/>
+        <conn input="numbersList.list2" output="count2"/>
+        <conn input="numbersList.list3" output="count3"/>
+        <conn input="numbersList.list4" output="count4"/>
+        <conn input="numbersList.list5" output="count5"/>
+        <conn input="numbersList.list6" output="count6"/>
+        <conn input="sum1.values" output="numbersList"/>
+        <conn input="numbersList.list1" output="count1"/>
+        <conn input="divide1.value1" output="numbersList"/>
+        <conn input="divide1.value2" output="sum1"/>
+        <conn input="percentage.value1" output="divide1"/>
+        <conn input="percentage.value2" output="percentageMultiplier"/>
+        <conn input="convert_range1.value" output="percentage"/>
+        <conn input="count7.list" output="numbersList"/>
+        <conn input="range1.end" output="count7"/>
+        <conn input="Pie.list" output="convert_range1"/>
+        <conn input="Pie.degrees" output="convert_range1"/>
+        <conn input="Pie.sliceSize" output="range1"/>
+        <conn input="combine1.list1" output="green"/>
+        <conn input="combine1.list2" output="red"/>
+        <conn input="combine1.list3" output="blue"/>
+        <conn input="combine1.list4" output="yellow"/>
+        <conn input="combine1.list5" output="orange"/>
+        <conn input="combine1.list6" output="purple"/>
+        <conn input="Pie.Fill" output="combine1"/>
+        <conn input="rotate1.shape" output="textpath1"/>
+        <conn input="colorize1.shape" output="rotate1"/>
+        <conn input="colorize1.fill" output="combine1"/>
+        <conn input="lookup1.list" output="import_csv1"/>
+        <conn input="distinct1.list" output="lookup1"/>
+        <conn input="round1.value" output="distinct1"/>
+        <conn input="textpath1.text" output="round1"/>
+        <conn input="add1.value2" output="divide2"/>
+        <conn input="divide2.value1" output="convert_range1"/>
+        <conn input="coordinates1.angle" output="add1"/>
+        <conn input="running_total1.values" output="convert_range1"/>
+        <conn input="add1.value1" output="running_total1"/>
+        <conn input="translate1.translate" output="coordinates1"/>
+        <conn input="translate1.shape" output="colorize1"/>
+        <conn input="rotate1.angle" output="add1"/>
+        <conn input="combine2.list1" output="Pie"/>
+        <conn input="combine2.list2" output="translate1"/>
+    </node>
+</ndbx>
