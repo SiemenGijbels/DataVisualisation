@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <title>D3.js Essential Training for Data Scientists</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="d3.v4.js"></script>
+</head>
+
+<body>
+    <script src="namen.js"></script>
+    <script src="three.js"></script>
+    <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
+    <script src="OrbitControls.js"></script>
+
+    <script type="text/javascript">
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        
+        camera.position.x = 200;
+        camera.position.y = 50;
+        camera.position.z = 200;
+        
+
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.5;
+        controls.enableZoom = true;
+
+        // instantiate a loader
+        var loader = new THREE.OBJLoader();
+
+        // load a resource
+        loader.load(
+            // resource URL
+            'siemenfrequentievlaanderen.obj',
+            // called when resource is loaded
+            function(object) {
+                vlaanderen = object;
+                scene.add(object);
+
+            },
+            // called when loading is in progresses
+            function(xhr) {
+
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+
+            },
+            // called when loading has errors
+            function(error) {
+
+                console.log('An error happened');
+
+            }
+        );
+
+        var keyLight = new THREE.DirectionalLight(new THREE.Color('hsl(30, 100%, 75%)'), 1.0);
+        keyLight.position.set(-100, 0, 100);
+
+        var fillLight = new THREE.DirectionalLight(new THREE.Color('hsl(240, 100%, 75%)'), 0.75);
+        fillLight.position.set(100, 0, 100);
+
+        var backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        backLight.position.set(100, 0, -100).normalize();
+
+        scene.add(keyLight);
+        scene.add(fillLight);
+        scene.add(backLight);
+
+
+        function animate() {
+            requestAnimationFrame(animate);
+            vlaanderen.rotation.y += 0.01;
+            controls.update();
+            renderer.render(scene, camera);
+            console.log(camera.position.x);
+            console.log(camera.position.y);
+            console.log(camera.position.z);
+        }
+        animate();
+    </script>
+
+</body>
+
+</html>
